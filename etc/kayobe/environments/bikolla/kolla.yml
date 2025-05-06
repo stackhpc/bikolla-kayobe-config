@@ -1,0 +1,14 @@
+---
+# Kayobe Kolla configuration.
+
+###############################################################################
+# Kolla feature flag configuration.
+
+kolla_enable_openstack_core: false
+kolla_enable_fluentd: false
+kolle_enable_haproxy: false
+kolla_enable_keystone: true
+kolla_enable_ironic: true
+kolla_enable_ironic_inspector: false
+kolla_enable_neutron: true
+kolla_enable_ovn: true

@@ -1,0 +1,9 @@
+[controllers]
+controller0
+
+[sushy-libvirt]
+testvm
+testvm2
+
+[baremetal-compute:children]
+sushy-libvirt
