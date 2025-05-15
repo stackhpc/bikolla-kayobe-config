@@ -50,7 +50,7 @@
               - name: '{{ inventory_hostname }}.qcow2'
                 device: 'disk'
                 format: 'qcow2'
-                capacity: '200GB'
+                capacity: '20GB'
                 pool: 'default'
             interfaces:
               - network: 'breth1'
