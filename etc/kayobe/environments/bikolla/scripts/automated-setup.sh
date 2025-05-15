@@ -101,9 +101,7 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     # NOTE(jake): baremetal-compute-register needs to support more Ironic config fields.
     pip install python-openstackclient python-ironicclient
     source $BASE_PATH/src/kayobe-config/etc/kolla/public-openrc-system.sh
-    openstack baremetal compute set testvm \
-    --network-data \
-    '
+    openstack baremetal node set testvm --network-data '{
     "links": [
         {
         "id": "port-641742da-fb61-4721-a113-a4299e9621be",
@@ -126,7 +124,7 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     }'
 
     # Run out-of-band agent inspection and move nodes to available state.
-    openstack baremetal compute set --inspect-interface agent testvm
+    openstack baremetal node set --inspect-interface agent testvm
     kayobe baremetal compute inspect
     kayobe baremetal compute provide
 

@@ -10,7 +10,7 @@ ironic_properties:
 
 ironic_resource_class: "example_resource_class"
 ironic_redfish_address: "{{ ipmi_address }}"
-ironic_capabilities: "boot_option:local,boot_mode:uefi"
+ironic_capabilities: "boot_option:local,boot_mode:uefi,secure_boot:true"
 ironic_redfish_system_id: /redfish/v1/Systems/{{ inventory_hostname | to_uuid }}
 
 ipmi_address: http://192.168.33.3:8000
