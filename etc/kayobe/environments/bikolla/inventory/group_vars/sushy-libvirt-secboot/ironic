@@ -1,0 +1,10 @@
+bikolla_enable_secureboot: true
+
+ironic_capabilities: "boot_option:local,boot_mode:uefi,secure_boot:true"
+
+ironic_instance_info:
+  image_source: "http://192.168.33.3:8089/noble-server-cloudimg-amd64.img"
+  image_checksum: "bc471ca49de03b5129c65b70f9862b7f4b5e721622fd34ade78132f6f7999e2d"
+  image_disk_format: "qcow2"
+  capabilities:
+    secure_boot: "true"

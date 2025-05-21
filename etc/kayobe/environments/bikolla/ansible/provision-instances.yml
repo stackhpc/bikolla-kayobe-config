@@ -18,29 +18,6 @@
     - name: Deploy instances
       openstack.cloud.baremetal_node_action:
         name: "{{ inventory_hostname }}"
-        config_drive:
-          meta_data:
-            hostname: node1
-            public_keys:
-              default: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-          network_data:
-            links:
-              - id: "{{ 'port-' + baremetal.ports[0].id }}"
-                type: phy
-                ethernet_mac_address: "{{ baremetal.ports[0].address }}"
-            networks:
-              - id: network0
-                type: ipv4
-                link: "{{ 'port-' + baremetal.ports[0].id }}"
-                ip_address: "192.168.33.158"
-                netmask: "255.255.255.0"
-                network_id: network0
-                routes: []
-            services: []
-        instance_info:
-          image_source: "http://192.168.33.3:8089/noble-server-cloudimg-amd64.img"
-          image_checksum: "bc471ca49de03b5129c65b70f9862b7f4b5e721622fd34ade78132f6f7999e2d"
-          image_disk_format: "qcow2"
-          capabilities:
-            secure_boot: "true"
+        config_drive: "{{ ironic_config_drive }}"
+        instance_info: "{{ ironic_instance_info }}"
       delegate_to: localhost

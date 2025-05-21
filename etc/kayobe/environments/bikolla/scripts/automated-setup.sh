@@ -93,7 +93,7 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     # Download Ubuntu 24.04 to Ironic HTTP server.
     scripts/install-built-ipa.sh && scripts/download-ubuntu.sh
 
-    # Register virtual baremetal nodes and run in-band Redfish inspection.
+    # Register virtual baremetal nodes and run out-of-band Redfish inspection.
     kayobe baremetal compute register
     kayobe baremetal compute inspect
 
@@ -104,7 +104,7 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     openstack baremetal node set testvm --network-data '{
     "links": [
         {
-        "id": "port-641742da-fb61-4721-a113-a4299e9621be",
+        "id": "port-25f18e96-b07a-4fab-905c-78dfbc0c192e",
         "type": "phy",
         "ethernet_mac_address": "52:54:00:4b:a1:ab"
         }
@@ -113,7 +113,7 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
         {
         "id": "network0",
         "type": "ipv4",
-        "link": "port-641742da-fb61-4721-a113-a4299e9621be",
+        "link": "port-25f18e96-b07a-4fab-905c-78dfbc0c192e",
         "ip_address": "192.168.33.158",
         "netmask": "255.255.255.0",
         "network_id": "network0",
@@ -122,9 +122,31 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     ],
     "services": []
     }'
+   openstack baremetal node set testvm2 --network-data '{
+    "links": [
+        {
+        "id": "port-3da846d2-6736-48b4-940f-ba3290f48073",
+        "type": "phy",
+        "ethernet_mac_address": "52:54:00:aa:4b:8a"
+        }
+    ],
+    "networks": [
+        {
+        "id": "network0",
+        "type": "ipv4",
+        "link": "port-3da846d2-6736-48b4-940f-ba3290f48073",
+        "ip_address": "192.168.33.159",
+        "netmask": "255.255.255.0",
+        "network_id": "network0",
+        "routes": []
+        }
+    ],
+    "services": []
+    }'
 
-    # Run out-of-band agent inspection and move nodes to available state.
+    # Run in-band agent inspection and move nodes to available state.
     openstack baremetal node set --inspect-interface agent testvm
+    openstack baremetal node set --inspect-interface agent testvm2
     kayobe baremetal compute inspect
     kayobe baremetal compute provide
 
