@@ -15,17 +15,25 @@
             vnic_type: baremetal
           register: osport
 
+        - name: Check if VIF attach exists
+          ansible.builtin.shell: |
+            openstack baremetal node vif list \
+            {{ inventory_hostname }}
+          failed_when: false
+          register: vif
+
         - name: Attach VIF to baremetal node
           ansible.builtin.shell: |
             openstack baremetal node vif attach \
             {{ inventory_hostname }} \
             {{ osport.port.id }}
+          when: '{{ vif.stdout == "" }}'
       delegate_to: localhost
-      when: 'neutron' in ( ironic_network_interface | default('noop') )
+      when: '"neutron" in (ironic_network_interface | default("noop"))'
 
     - name: Deploy instances
       openstack.cloud.baremetal_node_action:
         name: "{{ inventory_hostname }}"
-        config_drive: "{{ ironic_config_drive | default(omit) }}"
+        config_drive: "{{ ironic_config_drive }}"
         instance_info: "{{ ironic_instance_info }}"
       delegate_to: localhost
