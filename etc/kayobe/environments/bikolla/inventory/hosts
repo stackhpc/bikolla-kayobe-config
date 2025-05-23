@@ -4,20 +4,15 @@ controller0
 [sushy-libvirt-secboot]
 testvm ironic_network_address=192.168.33.158
 
-[sushy-libvirt-virtual-media]
-
-[sushy-libvirt-ipxe]
-#testvm3 ironic_network_address=192.168.33.160
+[sushy-libvirt]
 testvm2 ironic_network_address=192.168.33.159
 
-[sushy-libvirt-virtual-media:children]
-sushy-libvirt-secboot
-
-[sushy-libvirt]
+[sushy-libvirt-ipxe]
+testvm3 ironic_network_address=192.168.33.160
 
 [sushy-libvirt:children]
-sushy-libvirt-virtual-media
 sushy-libvirt-ipxe
+sushy-libvirt-secboot
 
 [baremetal-compute:children]
 sushy-libvirt

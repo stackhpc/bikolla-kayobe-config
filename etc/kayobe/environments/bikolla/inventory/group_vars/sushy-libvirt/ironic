@@ -19,25 +19,26 @@ ironic_redfish_system_id: /redfish/v1/Systems/{{ inventory_hostname | to_uuid }}
 
 ipmi_address: http://192.168.33.3:8000
 
+ironic_network_data:
+  links:
+    - id: "{{ 'port-' + bikolla_mac_addresses[inventory_hostname] }}"
+      type: phy
+      ethernet_mac_address: "{{ bikolla_mac_addresses[inventory_hostname] }}"
+  networks:
+    - id: network0
+      type: ipv4
+      link: "{{ 'port-' + bikolla_mac_addresses[inventory_hostname] }}"
+      ip_address: "{{ ironic_network_address }}"
+      netmask: "255.255.255.0"
+      network_id: network0
+      routes: []
+
 ironic_config_drive:
   meta_data:
     hostname: "{{ inventory_hostname }}"
     public_keys:
       default: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-  network_data:
-    links:
-      - id: "{{ 'port-' + bikolla_mac_addresses[inventory_hostname] }}"
-        type: phy
-        ethernet_mac_address: "{{ bikolla_mac_addresses[inventory_hostname] }}"
-    networks:
-      - id: network0
-        type: ipv4
-        link: "{{ 'port-' + bikolla_mac_addresses[inventory_hostname] }}"
-        ip_address: "{{ ironic_network_address }}"
-        netmask: "255.255.255.0"
-        network_id: network0
-        routes: []
-    services: []
+  network_data: "{{ ironic_network_data }}"
 
 ironic_instance_info:
   image_source: "http://192.168.33.3:8089/noble-server-cloudimg-amd64.img"
