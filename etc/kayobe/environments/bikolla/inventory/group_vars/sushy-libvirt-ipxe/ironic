@@ -1,0 +1,4 @@
+---
+
+ironic_boot_interface: ipxe
+ironic_network_interface: neutron

@@ -1,0 +1,15 @@
+---
+- name: Setup fake local_link_information
+  hosts: sushy-libvirt-ipxe
+  gather_facts: false
+  tasks:
+    - name: Get baremetal port metadata
+      openstack.cloud.baremetal_port_info:
+        node: "{{ inventory_hostname }}"
+      delegate_to: localhost
+      register: baremetal
+      run_once: true
+
+    - name: debug
+      debug:
+        msg: "{{ baremetal.ports[0] }}"

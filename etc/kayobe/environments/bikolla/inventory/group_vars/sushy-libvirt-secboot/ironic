@@ -1,3 +1,5 @@
+---
+
 bikolla_enable_secureboot: true
 
 ironic_capabilities: "boot_option:local,boot_mode:uefi,secure_boot:true"

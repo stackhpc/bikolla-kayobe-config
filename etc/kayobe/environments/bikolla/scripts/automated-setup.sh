@@ -79,16 +79,16 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     cd $KAYOBE_CONFIG_PATH/environments/$KAYOBE_ENVIRONMENT
     
     # Install Ansible dependnecies.
-    ansible-galaxy install -r ansible/requirements.yml
+    ansible-galaxy install -r $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/requirements.yml
     
     # Configure and install Sushy Virtual Redfish BMC emulator.
-    kayobe playbook run ansible/sushy-configure.yml
-    kayobe playbook run ansible/sushy-emulator.yml
+    kayobe playbook run $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/sushy-configure.yml
+    kayobe playbook run $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/sushy-emulator.yml
 
     # Create virtual baremetal libvirt VMs.
     pip install -r $BASE_PATH/src/kayobe-config/requirements.txt
-    kayobe playbook run ansible/generate-mac-addresses.yml
-    kayobe playbook run ansible/create-virtual-baremetal.yml
+    kayobe playbook run $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/generate-mac-addresses.yml
+    kayobe playbook run $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/create-virtual-baremetal.yml
 
     # Download Ubuntu 24.04 to Ironic HTTP server.
     scripts/install-built-ipa.sh && scripts/download-ubuntu.sh
@@ -143,13 +143,19 @@ if $KAYOBE_DEPLOY_VIRTUAL_BAREMETAL; then
     ],
     "services": []
     }'
+    openstack baremetal node set --inspect-interface=agent testvm
+    openstack baremetal node set --inspect-interface=agent testvm2
+    openstack baremetal node set --inspect-interface=agent testvm3
+    openstack baremetal node set --network-interface=neutron testvm3
+    openstack baremetal node set --boot-interface=ipxe testvm3
 
-    # Run in-band agent inspection and move nodes to available state.
-    openstack baremetal node set --inspect-interface agent testvm
-    openstack baremetal node set --inspect-interface agent testvm2
+    # Setup fake local_link_info for Neutron nodes.
+    kayobe playbook run $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/setup-local-link-information.yml
+
+    # Run in-band inspection and move nodes to available state.
     kayobe baremetal compute inspect
     kayobe baremetal compute provide
 
     # Deploy virtual baremetal.
-    kayobe playbook run ansible/provision-instances.yml
+    kayobe playbook run $KAYOBE_CONFIG_PATH/environments/bikolla/ansible/provision-instances.yml
 fi

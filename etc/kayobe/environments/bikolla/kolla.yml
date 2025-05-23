@@ -10,5 +10,6 @@ kolle_enable_haproxy: false
 kolla_enable_keystone: true
 kolla_enable_ironic: true
 kolla_enable_ironic_inspector: false
+kolla_enable_ironic_dnsmasq: false
 kolla_enable_neutron: true
 kolla_enable_ovn: true

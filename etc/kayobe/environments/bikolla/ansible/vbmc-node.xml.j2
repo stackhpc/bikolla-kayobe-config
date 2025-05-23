@@ -29,16 +29,16 @@
   <resource>
     <partition>/machine</partition>
   </resource>
-{% if bikolla_enable_secureboot %}
-  <os>
-    <type>hvm</type>
-    <loader secure='yes'/>
-{% else %}
-  <os>
+  <os firmware='efi'>
     <type arch='x86_64' machine='pc-q35-rhel9.4.0'>hvm</type>
-    <loader readonly='yes' secure='no' type='pflash'>/usr/share/OVMF/OVMF_CODE.secboot.fd</loader>
-    <nvram template='/usr/share/OVMF/OVMF_VARS.fd'>/var/lib/libvirt/qemu/nvram/{{ inventory_hostname }}_VARS.fd</nvram>
+    <firmware>
+{% if bikolla_enable_secureboot %}
+      <feature enabled='yes' name='secure-boot'/>
+      <feature enabled='yes' name='enrolled-keys'/>
+{% else %}
+      <feature enabled='no' name='secure-boot'/>
 {% endif %}
+    </firmware>
   </os>
   <features>
     <acpi/>
