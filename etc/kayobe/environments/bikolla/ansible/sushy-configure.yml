@@ -1,0 +1,15 @@
+- name: Configure Sushy Emulator
+  hosts: localhost
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Create Sushy configuration directory
+      ansible.builtin.file:
+        path: /etc/sushy
+        state: directory
+
+    # This is broken and needs a trailing comma fix at some point
+    - name: Template Sushy configuration
+      ansible.builtin.template:
+        src: "{{ kayobe_env_config_path }}/ansible/sushy.conf.j2"
+        dest: "/etc/sushy/sushy.conf"
